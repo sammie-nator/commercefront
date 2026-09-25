@@ -33,7 +33,7 @@ const Navbar = () => {
     >
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="font-display italic text-2xl font-semibold text-gradient tracking-wide">
-          The Store
+          Mumbi's Store
         </Link>
 
         {/* Desktop links */}

@@ -81,7 +81,7 @@ const About = () => {
             transition={{ delay: 0.2 }}
             className="text-gray-600 mt-6 max-w-xl mx-auto leading-relaxed"
           >
-            We started The Store to make everyday shopping feel a little more
+            We started Mumbi's Store to make everyday shopping feel a little more
             personal — fewer, better products, honest service, and a
             checkout experience that respects your time.
           </motion.p>
