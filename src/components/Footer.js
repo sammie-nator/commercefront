@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-4 py-12 grid sm:grid-cols-3 gap-10">
         <div>
           <Link to="/" className="font-display italic text-2xl font-semibold text-gradient tracking-wide">
-            The Store
+            Mumbi's Store
           </Link>
           <p className="text-sm text-gray-500 mt-3 leading-relaxed max-w-xs">
             Thoughtfully curated products, delivered with care.
@@ -31,7 +31,7 @@ const Footer = () => {
           <p className="text-xs font-semibold uppercase tracking-wider text-accent-600 mb-4">Support</p>
           <ul className="space-y-2 text-sm text-gray-600">
             <li><Link to="/track" className="hover:text-brand-700 transition">Track Order</Link></li>
-            <li><a href="mailto:hello@thestore.com" className="hover:text-brand-700 transition">hello@thestore.com</a></li>
+            <li><a href="mailto:hello@mumbisstore.com" className="hover:text-brand-700 transition">hello@mumbisstore.com</a></li>
           </ul>
         </div>
       </div>
@@ -43,7 +43,7 @@ const Footer = () => {
           viewport={{ once: true }}
           className="max-w-6xl mx-auto px-4 py-5 text-xs text-gray-400 text-center"
         >
-          © {year} The Store. All rights reserved.
+          © {year} Mumbi's Store. All rights reserved.
         </motion.p>
       </div>
     </footer>
