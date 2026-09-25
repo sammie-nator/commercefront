@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "./context/CartContext";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -21,10 +22,11 @@ import AdminUsers from "./admin/AdminUsers";
 import RequireAdmin from "./admin/RequireAdmin";
 
 const StorefrontLayout = ({ children }) => (
-  <>
+  <div className="min-h-screen flex flex-col">
     <Navbar />
-    {children}
-  </>
+    <div className="flex-1">{children}</div>
+    <Footer />
+  </div>
 );
 
 function App() {
