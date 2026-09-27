@@ -5,8 +5,8 @@ import ProductCard from "../components/ProductCard";
 import ProductRail from "../components/ProductRail";
 import Carousel from "../components/Carousel";
 import Loader from "../components/Loader";
-import hero1 from "../assets/images/hero-1.jpg";
-import hero2 from "../assets/images/hero-2.jpg";
+import hero1 from "../assets/hero1.jpg";
+import hero2 from "../assets/hero2.jpg";
 
 const HERO_SLIDES = [
   {
