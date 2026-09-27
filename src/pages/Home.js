@@ -5,6 +5,8 @@ import ProductCard from "../components/ProductCard";
 import ProductRail from "../components/ProductRail";
 import Carousel from "../components/Carousel";
 import Loader from "../components/Loader";
+import hero1 from "../assets/images/hero-1.jpg";
+import hero2 from "../assets/images/hero-2.jpg";
 
 const HERO_SLIDES = [
   {
@@ -14,8 +16,7 @@ const HERO_SLIDES = [
       "Discover a hand-picked edit of quality goods — thoughtfully sourced, beautifully simple.",
     ctaLabel: "Shop the Collection",
     ctaTo: "#shop",
-    image:
-      "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1600&auto=format&fit=crop",
+    image: hero1,
   },
   {
     eyebrow: "Trending Now",
@@ -23,8 +24,7 @@ const HERO_SLIDES = [
     subtitle: "Fast, reliable pickup and delivery across every location we serve.",
     ctaLabel: "Explore Products",
     ctaTo: "#shop",
-    image:
-      "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=1600&auto=format&fit=crop",
+    image: hero2,
   },
   {
     eyebrow: "Customer Favorites",
@@ -32,8 +32,7 @@ const HERO_SLIDES = [
     subtitle: "Join thousands of happy customers who shop with us every week.",
     ctaLabel: "Start Shopping",
     ctaTo: "#shop",
-    image:
-      "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1600&auto=format&fit=crop",
+    image: hero1,
   },
 ];
 
