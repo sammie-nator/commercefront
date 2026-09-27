@@ -7,6 +7,7 @@ import Carousel from "../components/Carousel";
 import Loader from "../components/Loader";
 import hero1 from "../assets/hero1.jpg";
 import hero2 from "../assets/hero2.jpg";
+import hero3 from "../assets/hero3.jpg";
 
 const HERO_SLIDES = [
   {
@@ -32,7 +33,7 @@ const HERO_SLIDES = [
     subtitle: "Join thousands of happy customers who shop with us every week.",
     ctaLabel: "Start Shopping",
     ctaTo: "#shop",
-    image: hero1,
+    image: hero3,
   },
 ];
 
