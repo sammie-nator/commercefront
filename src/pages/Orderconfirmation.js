@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import api from "../api/axios";
 import Loader from "../components/Loader";
+import { useCart } from "../context/CartContext";
 
 const POLL_MS = 3000; // how often we ask the backend
 const GIVE_UP_MS = 2 * 60 * 1000; // stop auto-checking after 2 minutes (user can resume)
@@ -65,9 +66,11 @@ const Row = ({ label, children }) => (
 
 const OrderConfirmation = () => {
   const { checkoutId } = useParams();
+  const { clearCart } = useCart();
   const [result, setResult] = useState({ status: "pending" });
   const [timedOut, setTimedOut] = useState(false);
   const [round, setRound] = useState(0); // bumped by "Check again" to restart polling
+  const cartCleared = useRef(false);
 
   useEffect(() => {
     let stopped = false;
@@ -80,6 +83,13 @@ const OrderConfirmation = () => {
         const { data } = await api.get(`/orders/checkout/${checkoutId}`);
         if (stopped) return;
         setResult(data);
+
+        // Clear cart once payment is confirmed (only once)
+        if (data.status === "confirmed" && !cartCleared.current) {
+          cartCleared.current = true;
+          clearCart();
+        }
+
         if (data.status !== "pending") return; // confirmed or failed: nothing more to wait for
       } catch (err) {
         if (stopped) return;
@@ -101,7 +111,7 @@ const OrderConfirmation = () => {
       stopped = true;
       clearTimeout(timer);
     };
-  }, [checkoutId, round]);
+  }, [checkoutId, round, clearCart]);
 
   const { status } = result;
 
@@ -123,8 +133,8 @@ const OrderConfirmation = () => {
                 <button type="button" onClick={() => setRound((r) => r + 1)} className={primaryBtn}>
                   Check again
                 </button>
-                <Link to="/" className={secondaryBtn}>
-                  Back to shop
+                <Link to="/cart" className={secondaryBtn}>
+                  Back to cart
                 </Link>
               </div>
             </>
@@ -153,9 +163,9 @@ const OrderConfirmation = () => {
           <p className="text-gray-600 leading-relaxed mb-2">
             {result.message || "M-Pesa didn't confirm this payment."}
           </p>
-          <p className="text-gray-500 text-sm mb-8">No order was placed.</p>
-          <Link to="/" className={primaryBtn}>
-            Back to shop
+          <p className="text-gray-500 text-sm mb-8">No order was placed. Your cart is unchanged.</p>
+          <Link to="/cart" className={primaryBtn}>
+            Back to cart
           </Link>
         </div>
       )}
@@ -170,8 +180,8 @@ const OrderConfirmation = () => {
             The link may be old or mistyped. If you've already paid, use the phone number and
             tracking code you were given to find your order.
           </p>
-          <Link to="/" className={primaryBtn}>
-            Back to shop
+          <Link to="/cart" className={primaryBtn}>
+            Back to cart
           </Link>
         </div>
       )}
@@ -190,7 +200,6 @@ const ConfirmedOrder = ({ order }) => {
     order.pickupLocation === "Custom"
       ? order.customLocation || "Custom location"
       : order.pickupLocation;
-  // Change "/track" to wherever your tracking page lives
   const trackPath = `/track?phone=${encodeURIComponent(order.customerPhone)}&code=${order.trackingCode}`;
 
   return (
@@ -202,21 +211,26 @@ const ConfirmedOrder = ({ order }) => {
         {money(order.totalAmount)}.
       </p>
 
-      {/* The part people need to keep: the phone number and code that unlock tracking */}
+      {/* Tracking code + M-Pesa receipt — the two things the customer must keep */}
       <div className="bg-white rounded-3xl shadow-glow border border-brand-100/70 px-6 py-8 mb-8">
-        <p className="text-gray-500 text-sm mb-1">Track your order with this phone number</p>
-        <p className="font-display text-2xl text-gray-900 mb-6 break-all">
-          {order.customerPhone}
-        </p>
-        <p className="text-gray-500 text-sm mb-1">and this tracking code</p>
+        <p className="text-gray-500 text-sm mb-1">Your tracking code</p>
         <p
-          className="font-display text-6xl font-semibold text-gradient tracking-[0.2em] pl-[0.2em]"
+          className="font-display text-6xl font-semibold text-gradient tracking-[0.2em] pl-[0.2em] mb-6"
           aria-label={`Tracking code ${String(order.trackingCode).split("").join(" ")}`}
         >
           {order.trackingCode}
         </p>
-        <p className="text-gray-500 text-sm mt-6">
-          Keep both. You'll need them together to check on your order.
+
+        {order.receipt && (
+          <>
+            <p className="text-gray-500 text-sm mb-1">M-Pesa receipt</p>
+            <p className="font-display text-2xl text-gray-900 mb-6 break-all">{order.receipt}</p>
+          </>
+        )}
+
+        <p className="text-gray-500 text-sm">
+          Use tracking code <strong>{order.trackingCode}</strong> with phone{" "}
+          <strong>{order.customerPhone}</strong> on the Track Order page.
         </p>
       </div>
 
