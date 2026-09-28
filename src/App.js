@@ -10,6 +10,7 @@ import About from "./pages/About";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/Orderconfirmation";
 import OrderTracking from "./pages/OrderTracking";
 
 import AdminLogin from "./admin/AdminLogin";
@@ -73,6 +74,15 @@ function App() {
             element={
               <StorefrontLayout>
                 <Checkout />
+              </StorefrontLayout>
+            }
+          />
+          {/* Payment result page — polls until confirmed or failed */}
+          <Route
+            path="/order/:checkoutId"
+            element={
+              <StorefrontLayout>
+                <OrderConfirmation />
               </StorefrontLayout>
             }
           />
