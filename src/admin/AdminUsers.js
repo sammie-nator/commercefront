@@ -64,36 +64,32 @@ const AdminUsers = () => {
     }
   };
 
+  const inp = "field !mt-0";
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Staff & PINs</h1>
-        <button
-          onClick={() => setShowForm((s) => !s)}
-          className="bg-brand-600 text-white font-medium px-4 py-2 rounded-lg text-sm hover:bg-brand-700"
-        >
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <h1 className="font-display font-extrabold text-2xl sm:text-3xl">Staff & PINs</h1>
+        <button onClick={() => setShowForm((s) => !s)} className={`${showForm ? "btn-ghost" : "btn-primary"} btn-sm`}>
           {showForm ? "Cancel" : "+ New Staff User"}
         </button>
       </div>
 
       {showForm && (
-        <form
-          onSubmit={handleCreate}
-          className="bg-white border border-gray-100 rounded-xl p-5 mb-6 grid sm:grid-cols-2 gap-4"
-        >
+        <form onSubmit={handleCreate} className="card p-4 sm:p-5 mb-6 grid sm:grid-cols-2 gap-3 sm:gap-4">
           <input
             required
             placeholder="Full name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            className="border border-gray-200 rounded-lg px-3 py-2"
+            className={inp}
           />
           <input
             required
             placeholder="Username (for login)"
             value={form.username}
             onChange={(e) => setForm({ ...form, username: e.target.value })}
-            className="border border-gray-200 rounded-lg px-3 py-2"
+            className={inp}
           />
           <input
             required
@@ -102,20 +98,13 @@ const AdminUsers = () => {
             inputMode="numeric"
             value={form.pin}
             onChange={(e) => setForm({ ...form, pin: e.target.value.replace(/\D/g, "") })}
-            className="border border-gray-200 rounded-lg px-3 py-2 tracking-widest"
+            className={`${inp} tracking-widest`}
           />
-          <select
-            value={form.role}
-            onChange={(e) => setForm({ ...form, role: e.target.value })}
-            className="border border-gray-200 rounded-lg px-3 py-2"
-          >
+          <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className={inp}>
             <option value="staff">Staff</option>
             <option value="owner">Owner</option>
           </select>
-          <button
-            type="submit"
-            className="sm:col-span-2 bg-brand-600 text-white font-semibold py-2.5 rounded-lg hover:bg-brand-700"
-          >
+          <button type="submit" className="sm:col-span-2 btn-primary">
             Create Staff User
           </button>
         </form>
@@ -123,47 +112,72 @@ const AdminUsers = () => {
 
       {loading ? (
         <Loader />
+      ) : users.length === 0 ? (
+        <p className="text-center text-ink/50 py-16">No staff users yet.</p>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500 text-left">
-              <tr>
-                <th className="px-4 py-3">Name</th>
-                <th className="px-4 py-3">Username</th>
-                <th className="px-4 py-3">Role</th>
-                <th className="px-4 py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u._id} className="border-t border-gray-100">
-                  <td className="px-4 py-3">{u.name}</td>
-                  <td className="px-4 py-3">{u.username}</td>
-                  <td className="px-4 py-3">
-                    <span className="px-2 py-1 rounded-full bg-gray-100 text-xs">{u.role}</span>
-                  </td>
-                  <td className="px-4 py-3 flex gap-3">
-                    <button
-                      onClick={() => handleResetPin(u._id)}
-                      className="text-brand-600 text-xs hover:underline"
-                    >
-                      Reset PIN
-                    </button>
-                    <button
-                      onClick={() => handleDelete(u._id)}
-                      className="text-red-500 text-xs hover:underline"
-                    >
-                      Remove
-                    </button>
-                  </td>
+        <>
+          {/* Mobile cards */}
+          <div className="sm:hidden space-y-3">
+            {users.map((u) => (
+              <div key={u._id} className="card p-4">
+                <div className="flex justify-between items-start gap-3">
+                  <div className="min-w-0">
+                    <p className="font-display font-bold truncate">{u.name}</p>
+                    <p className="text-sm text-ink/60 truncate">@{u.username}</p>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full border-2 border-ink bg-sun-300 text-[11px] font-display font-bold">
+                    {u.role}
+                  </span>
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <button onClick={() => handleResetPin(u._id)} className="btn-ghost btn-sm flex-1">
+                    Reset PIN
+                  </button>
+                  <button onClick={() => handleDelete(u._id)} className="btn-danger btn-sm flex-1">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tablet+ table */}
+          <div className="hidden sm:block card overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-clay text-ink/70 text-left font-display">
+                <tr>
+                  <th className="px-4 py-3">Name</th>
+                  <th className="px-4 py-3">Username</th>
+                  <th className="px-4 py-3">Role</th>
+                  <th className="px-4 py-3">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          {users.length === 0 && (
-            <p className="text-center text-gray-400 py-10">No staff users yet.</p>
-          )}
-        </div>
+              </thead>
+              <tbody>
+                {users.map((u) => (
+                  <tr key={u._id} className="border-t border-ink/10">
+                    <td className="px-4 py-3">{u.name}</td>
+                    <td className="px-4 py-3">{u.username}</td>
+                    <td className="px-4 py-3">
+                      <span className="px-2.5 py-0.5 rounded-full border-2 border-ink bg-sun-300 text-[11px] font-display font-bold">
+                        {u.role}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex gap-4">
+                        <button onClick={() => handleResetPin(u._id)} className="text-brand-700 font-semibold text-xs hover:underline">
+                          Reset PIN
+                        </button>
+                        <button onClick={() => handleDelete(u._id)} className="text-accent-600 font-semibold text-xs hover:underline">
+                          Remove
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );
