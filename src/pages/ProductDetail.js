@@ -24,8 +24,8 @@ const ProductDetail = () => {
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <Loader label="Loading product..." />;
-  if (!product) return <p className="text-center py-20">Product not found.</p>;
+  if (loading) return <Loader label="Inaleta bidhaa..." />;
+  if (!product) return <p className="text-center py-20 font-display font-bold text-xl">Bidhaa haipatikani · Product not found.</p>;
 
   const handleAdd = () => {
     addItem(product, qty);
@@ -42,7 +42,7 @@ const ProductDetail = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 grid md:grid-cols-2 gap-10">
       <div>
-        <div className="relative aspect-square bg-brand-50 rounded-3xl overflow-hidden mb-3 shadow-sm">
+        <div className="relative aspect-square bg-clay rounded-2xl border-2 border-ink shadow-pop overflow-hidden mb-4">
           <AnimatePresence mode="wait">
             <motion.img
               key={activeImg}
@@ -67,8 +67,8 @@ const ProductDetail = () => {
             <button
               key={idx}
               onClick={() => setActiveImg(idx)}
-              className={`h-16 w-16 rounded-xl overflow-hidden border-2 transition ${
-                activeImg === idx ? "border-brand-600 shadow-glow" : "border-transparent opacity-70 hover:opacity-100"
+              className={`h-16 w-16 rounded-lg overflow-hidden border-2 transition ${
+                activeImg === idx ? "border-ink shadow-pop-sm" : "border-ink/20 opacity-70 hover:opacity-100"
               }`}
             >
               <img src={imageUrl(img)} alt="" className="h-full w-full object-cover" />
@@ -78,17 +78,15 @@ const ProductDetail = () => {
       </div>
 
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-        <p className="text-xs text-accent-600 font-semibold uppercase tracking-wider">
-          {product.category}
-        </p>
-        <h1 className="font-display italic text-3xl mt-1 text-gray-900">{product.name}</h1>
-        <p className="text-2xl font-semibold text-brand-800 mt-4">
+        <p className="eyebrow">{product.category}</p>
+        <h1 className="font-display font-extrabold text-4xl mt-1 leading-tight">{product.name}</h1>
+        <p className="inline-block bg-sun-400 border-2 border-ink shadow-pop-sm px-4 py-1.5 font-display font-extrabold text-2xl mt-4 -rotate-1">
           KES {product.price.toLocaleString()}
         </p>
-        <p className="text-gray-600 mt-4 leading-relaxed">{product.description}</p>
+        <p className="text-ink/75 mt-5 leading-relaxed">{product.description}</p>
 
-        <p className="text-sm mt-4 text-gray-500">
-          {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+        <p className={`text-sm mt-4 font-semibold ${product.stock > 0 && product.stock <= 3 ? "text-accent-600" : "text-ink/60"}`}>
+          {product.stock > 0 ? `${product.stock} in stock` : "Imeisha · Out of stock"}
         </p>
 
         {product.stock > 0 && (
@@ -96,14 +94,14 @@ const ProductDetail = () => {
             <div className="flex items-center gap-3 mt-6">
               <button
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                className="h-9 w-9 rounded-full border border-brand-200 hover:bg-brand-50 transition"
+                className="h-10 w-10 rounded-lg border-2 border-ink bg-white font-bold hover:bg-sun-300 transition"
               >
                 −
               </button>
-              <span className="w-8 text-center font-medium">{qty}</span>
+              <span className="w-8 text-center font-display font-bold text-lg">{qty}</span>
               <button
                 onClick={() => setQty((q) => Math.min(product.stock, q + 1))}
-                className="h-9 w-9 rounded-full border border-brand-200 hover:bg-brand-50 transition"
+                className="h-10 w-10 rounded-lg border-2 border-ink bg-white font-bold hover:bg-sun-300 transition"
               >
                 +
               </button>
@@ -112,19 +110,17 @@ const ProductDetail = () => {
             <div className="flex gap-3 mt-6">
               <motion.button
                 whileTap={{ scale: 0.97 }}
-                whileHover={{ y: -2 }}
                 onClick={handleAdd}
-                className="flex-1 border-2 border-brand-600 text-brand-700 font-semibold py-3 rounded-xl hover:bg-brand-50 transition"
+                className="btn-ghost flex-1"
               >
-                Add to Cart
+                Weka Kikapuni
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.97 }}
-                whileHover={{ y: -2 }}
                 onClick={handleBuyNow}
-                className="flex-1 bg-brand-gradient text-white font-semibold py-3 rounded-xl shadow-glow hover:shadow-glow-lg transition"
+                className="btn-primary flex-1"
               >
-                Buy Now
+                Nunua Sasa
               </motion.button>
             </div>
           </>

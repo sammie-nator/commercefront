@@ -14,8 +14,7 @@ const STATUS_LABELS = {
   cancelled: "Cancelled",
 };
 
-const inputClass =
-  "mt-1 w-full border border-brand-100 rounded-xl px-4 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-brand-400 transition";
+const inputClass = "field";
 
 const OrderTracking = () => {
   const [params] = useSearchParams();
@@ -42,11 +41,12 @@ const OrderTracking = () => {
 
   return (
     <div className="max-w-md mx-auto px-4 py-8">
-      <h1 className="font-display italic text-3xl text-gray-900 mb-6">Track Your Order</h1>
+      <p className="eyebrow mb-1">Fuatilia</p>
+      <h1 className="font-display font-extrabold text-4xl mb-6">Track your order</h1>
 
-      <form onSubmit={handleSearch} className="space-y-4 mb-8">
+      <form onSubmit={handleSearch} className="card p-5 space-y-4 mb-8">
         <div>
-          <label className="text-sm font-medium text-gray-700">Phone Number</label>
+          <label className="text-sm font-display font-bold">Phone Number</label>
           <input
             required
             value={phone}
@@ -56,7 +56,7 @@ const OrderTracking = () => {
           />
         </div>
         <div>
-          <label className="text-sm font-medium text-gray-700">4-Digit Tracking Code</label>
+          <label className="text-sm font-display font-bold">4-Digit Tracking Code</label>
           <input
             required
             maxLength={4}
@@ -66,11 +66,10 @@ const OrderTracking = () => {
           />
         </div>
         <motion.button
-          whileTap={{ scale: 0.97 }}
-          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={loading}
-          className="w-full bg-brand-gradient text-white font-semibold py-3 rounded-xl shadow-glow hover:shadow-glow-lg transition disabled:opacity-60"
+          className="btn-primary w-full"
         >
           {loading ? "Searching..." : "Track Order"}
         </motion.button>
@@ -80,10 +79,10 @@ const OrderTracking = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl border border-brand-100/70 shadow-sm p-5"
+          className="card p-5 bg-clay"
         >
-          <p className="text-sm text-gray-500">Order for {order.customerName}</p>
-          <p className="font-display italic text-xl mb-4 text-gray-900">
+          <p className="text-sm text-ink/60">Order for {order.customerName}</p>
+          <p className="font-display font-extrabold text-2xl mb-4">
             {STATUS_LABELS[order.status]}
           </p>
 
@@ -95,18 +94,18 @@ const OrderTracking = () => {
                     <motion.div
                       initial={false}
                       animate={{ scale: idx === currentStepIndex ? 1.3 : 1 }}
-                      className={`h-3 w-3 rounded-full ${
-                        idx <= currentStepIndex ? "bg-brand-gradient" : "bg-gray-200"
+                      className={`h-4 w-4 rounded-full border-2 border-ink ${
+                        idx <= currentStepIndex ? "bg-brand-600" : "bg-white"
                       }`}
                     />
-                    <span className="text-[10px] text-gray-500 mt-1 text-center">
+                    <span className="text-[10px] text-ink/60 font-semibold mt-1 text-center">
                       {STATUS_LABELS[step]}
                     </span>
                   </div>
                   {idx < STATUS_STEPS.length - 1 && (
                     <div
-                      className={`h-0.5 flex-1 -mt-4 ${
-                        idx < currentStepIndex ? "bg-brand-gradient" : "bg-gray-200"
+                      className={`h-[3px] flex-1 -mt-4 ${
+                        idx < currentStepIndex ? "bg-brand-600" : "bg-ink/15"
                       }`}
                     />
                   )}
@@ -115,7 +114,7 @@ const OrderTracking = () => {
             </div>
           )}
 
-          <div className="border-t border-brand-100 pt-4 space-y-1 text-sm">
+          <div className="border-t-2 border-dashed border-ink/30 pt-4 space-y-1 text-sm">
             {order.items.map((i, idx) => (
               <div key={idx} className="flex justify-between">
                 <span>
@@ -126,11 +125,11 @@ const OrderTracking = () => {
             ))}
             <div className="flex justify-between font-bold pt-2">
               <span>Total</span>
-              <span className="text-brand-800">KES {order.totalAmount.toLocaleString()}</span>
+              <span className="text-ink font-display">KES {order.totalAmount.toLocaleString()}</span>
             </div>
           </div>
 
-          <p className="text-xs text-gray-400 mt-4">
+          <p className="text-xs text-ink/50 mt-4">
             Pickup: {order.pickupLocation === "Custom" ? order.customLocation : order.pickupLocation}
           </p>
         </motion.div>

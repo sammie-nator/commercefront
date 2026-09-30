@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useInView, animate } from "framer-motion";
+import { SITE, waLink } from "../config/site";
 
-// Simple count-up number that animates into view once.
 const Counter = ({ to, suffix = "" }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
@@ -19,7 +19,7 @@ const Counter = ({ to, suffix = "" }) => {
   }, [inView, to]);
 
   return (
-    <span ref={ref} className="font-display text-4xl sm:text-5xl text-gradient font-semibold">
+    <span ref={ref} className="font-display font-extrabold text-5xl sm:text-6xl text-accent-500">
       {value.toLocaleString()}
       {suffix}
     </span>
@@ -27,130 +27,101 @@ const Counter = ({ to, suffix = "" }) => {
 };
 
 const VALUES = [
-  {
-    title: "Thoughtfully Curated",
-    body: "Every product is chosen for quality and character, never just to fill a shelf.",
-  },
-  {
-    title: "Honest & Transparent",
-    body: "Clear pricing, real stock levels, and order tracking you can actually trust.",
-  },
-  {
-    title: "Built Around You",
-    body: "From easy checkout to fast pickup, every detail is designed with the customer in mind.",
-  },
+  { emoji: "♻️", title: "Thrift with pride", body: "Pre-loved pieces with a lot of life left. Good for your wallet and kinder to the planet." },
+  { emoji: "🤝", title: "Uaminifu", body: "Honest photos, clear prices, real stock levels. What you see is what you collect." },
+  { emoji: "📱", title: "Easy as M-Pesa", body: "Pay from your phone, choose a pickup point, track your order. No stress." },
 ];
 
+// TODO: replace with your real numbers
 const STATS = [
   { to: 5, suffix: "+", label: "Years serving customers" },
   { to: 12000, suffix: "+", label: "Orders fulfilled" },
-  { to: 98, suffix: "%", label: "Customer satisfaction" },
+  { to: 98, suffix: "%", label: "Happy customers" },
 ];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
+const reveal = { initial: "hidden", whileInView: "show", viewport: { once: true, margin: "-60px" }, variants: fadeUp };
 
 const About = () => {
+  const wa = waLink();
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-brand-gradient-soft">
-        <div className="absolute inset-0 bg-brand-radial" />
-        <div className="relative max-w-4xl mx-auto px-4 py-24 text-center">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="uppercase tracking-[0.3em] text-xs font-semibold text-accent-600 mb-4"
-          >
-            Our Story
+      <section className="relative overflow-hidden bg-brand-700 text-paper">
+        <div
+          className="absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 4l20 20-20 20L4 24z' fill='none' stroke='%23fbd66a' stroke-width='2'/%3E%3C/svg%3E\")",
+          }}
+        />
+        <div className="relative max-w-4xl mx-auto px-4 py-20 sm:py-28 text-center">
+          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="font-hand text-3xl text-sun-300 mb-2">
+            Hadithi yetu
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="font-display italic text-4xl sm:text-6xl text-gray-900 leading-tight"
+            className="font-display font-extrabold text-4xl sm:text-6xl leading-[1.05]"
           >
-            A little more thought,
-            <br /> in every order.
+            Born in {SITE.town}.
+            <br />
+            <span className="text-sun-400">Dressed for Kenya.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-gray-600 mt-6 max-w-xl mx-auto leading-relaxed"
+            className="text-paper/80 mt-6 max-w-xl mx-auto leading-relaxed text-lg"
           >
-            We started Mumi Thrifts to make everyday shopping feel a little more
-            personal — fewer, better products, honest service, and a
-            checkout experience that respects your time.
+            {SITE.name} started right here in {SITE.town}, at the foot of Mt Kenya, with one idea: quality thrift
+            should be easy to find, fair to buy, and simple to pay for.
           </motion.p>
         </div>
+        <div className="shuka-band" />
       </section>
 
       {/* Story */}
       <section className="max-w-5xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center">
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={fadeUp}
-        >
+        <motion.div {...reveal} className="relative">
+          <div className="absolute inset-0 translate-x-3 translate-y-3 rounded-2xl bg-accent-500 border-2 border-ink" />
           <img
             src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1200&auto=format&fit=crop"
-            alt="Our workspace"
-            className="rounded-3xl shadow-glow-lg object-cover w-full h-[360px]"
+            alt="Our shop"
+            className="relative rounded-2xl border-2 border-ink object-cover w-full h-[360px]"
           />
         </motion.div>
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={fadeUp}
-        >
-          <h2 className="font-display italic text-3xl text-gray-900 mb-4">
-            Why we do this
-          </h2>
-          <p className="text-gray-600 leading-relaxed mb-4">
-            What began as a small, local idea has grown into a shop trusted
-            by customers who care about quality as much as convenience. We
-            work directly with a small set of sellers so every listing means
-            something.
+        <motion.div {...reveal}>
+          <p className="eyebrow mb-2">Why we do this</p>
+          <h2 className="font-display font-extrabold text-3xl mb-4">Haba na haba, one good find at a time.</h2>
+          <p className="text-ink/75 leading-relaxed mb-4">
+            What began as a small, local idea has grown into a shop people across {SITE.town} trust. We hand-pick
+            every piece, so each listing means something.
           </p>
-          <p className="text-gray-600 leading-relaxed">
-            No gimmicks, no clutter — just a clean shopping experience and
-            real people behind every order.
+          <p className="text-ink/75 leading-relaxed">
+            No gimmicks, no clutter. Just a clean shop, fair prices, and real people behind every order.
           </p>
         </motion.div>
       </section>
 
       {/* Values */}
-      <section className="bg-brand-50/60 py-20">
+      <section className="bg-clay border-y-2 border-ink py-20">
         <div className="max-w-5xl mx-auto px-4">
-          <motion.h2
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="font-display italic text-3xl text-gray-900 text-center mb-12"
-          >
+          <motion.h2 {...reveal} className="font-display font-extrabold text-3xl text-center mb-12">
             What we stand for
           </motion.h2>
           <div className="grid sm:grid-cols-3 gap-6">
             {VALUES.map((v, i) => (
-              <motion.div
-                key={v.title}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-40px" }}
-                variants={fadeUp}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -6 }}
-                className="bg-white rounded-3xl p-7 shadow-sm hover:shadow-glow transition-shadow border border-brand-100/70"
-              >
-                <div className="h-10 w-10 rounded-full bg-brand-gradient mb-5" />
-                <h3 className="font-display text-xl text-gray-900 mb-2">{v.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{v.body}</p>
+              <motion.div key={v.title} {...reveal} transition={{ delay: i * 0.1 }} whileHover={{ y: -4, x: -2 }} className="card p-7">
+                <div className="h-12 w-12 rounded-full bg-sun-400 border-2 border-ink flex items-center justify-center text-2xl mb-5">
+                  {v.emoji}
+                </div>
+                <h3 className="font-display font-bold text-xl mb-2">{v.title}</h3>
+                <p className="text-ink/70 text-sm leading-relaxed">{v.body}</p>
               </motion.div>
             ))}
           </div>
@@ -163,30 +134,24 @@ const About = () => {
           {STATS.map((s) => (
             <div key={s.label}>
               <Counter to={s.to} suffix={s.suffix} />
-              <p className="text-gray-500 text-sm mt-2">{s.label}</p>
+              <p className="text-ink/60 text-sm mt-2 font-semibold">{s.label}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-brand-gradient" />
-        <div className="relative max-w-3xl mx-auto px-4 py-20 text-center">
-          <h2 className="font-display italic text-3xl sm:text-4xl text-white mb-4">
-            Ready to find something you'll love?
-          </h2>
-          <p className="text-white/80 mb-8">
-            Browse the full collection and get it delivered to your door.
-          </p>
-          <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="inline-block">
-            <Link
-              to="/"
-              className="inline-block bg-white text-brand-800 font-semibold px-8 py-3 rounded-full shadow-glow-lg"
-            >
-              Start Shopping
-            </Link>
-          </motion.div>
+      <section className="bg-accent-500 border-t-2 border-ink">
+        <div className="max-w-3xl mx-auto px-4 py-20 text-center text-paper">
+          <p className="font-hand text-3xl text-sun-300">Karibu!</p>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl mb-4">Ready to find something you'll love?</h2>
+          <p className="text-paper/85 mb-8">Browse the collection, pay with M-Pesa, pick up in {SITE.town}.</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link to="/" className="btn-sun">Start shopping →</Link>
+            {wa && (
+              <a href={wa} target="_blank" rel="noreferrer" className="btn-mpesa">WhatsApp us</a>
+            )}
+          </div>
         </div>
       </section>
     </div>

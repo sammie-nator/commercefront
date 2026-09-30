@@ -1,25 +1,22 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const Loader = ({ label = "Loading..." }) => (
+// Three bouncing "coffee cherries" — a nod to Embu's coffee country
+const Loader = ({ label = "Inapakia..." }) => (
   <div className="flex flex-col items-center justify-center py-20 gap-4">
-    <motion.div
-      className="h-12 w-12 rounded-full"
-      style={{
-        background: "conic-gradient(from 0deg, #9333ea, #db2777, #9333ea)",
-        WebkitMask: "radial-gradient(farthest-side, transparent calc(100% - 4px), #000 0)",
-        mask: "radial-gradient(farthest-side, transparent calc(100% - 4px), #000 0)",
-      }}
-      animate={{ rotate: 360 }}
-      transition={{ repeat: Infinity, duration: 0.9, ease: "linear" }}
-    />
-    <motion.p
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="text-sm text-gray-500 font-medium"
-    >
-      {label}
-    </motion.p>
+    <div className="flex gap-2">
+      {[0, 1, 2].map((i) => (
+        <motion.span
+          key={i}
+          className={`h-4 w-4 rounded-full border-2 border-ink ${
+            ["bg-accent-500", "bg-sun-400", "bg-brand-600"][i]
+          }`}
+          animate={{ y: [0, -14, 0] }}
+          transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15, ease: "easeInOut" }}
+        />
+      ))}
+    </div>
+    <p className="text-sm text-ink/60 font-display font-semibold">{label}</p>
   </div>
 );
 

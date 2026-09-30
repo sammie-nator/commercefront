@@ -1,50 +1,51 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { SITE, waLink } from "../config/site";
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const wa = waLink();
 
   return (
-    <footer className="relative mt-20 border-t border-brand-100/70 bg-white/70 backdrop-blur">
-      <div className="absolute inset-x-0 top-0 h-0.5 bg-brand-gradient" />
+    <footer className="mt-20 bg-brand-900 text-paper">
+      <div className="shuka-band" />
       <div className="max-w-6xl mx-auto px-4 py-12 grid sm:grid-cols-3 gap-10">
         <div>
-          <Link to="/" className="font-display italic text-2xl font-semibold text-gradient tracking-wide">
-            Mumi Thrifts
-          </Link>
-          <p className="text-sm text-gray-500 mt-3 leading-relaxed max-w-xs">
-            Thoughtfully curated products, delivered with care.
+          <p className="font-display font-extrabold text-3xl">
+            Mumi <span className="text-sun-400">Thrifts</span>
+          </p>
+          <p className="font-hand text-2xl text-sun-300 mt-1">Karibu tena!</p>
+          <p className="text-sm text-paper/70 mt-3 max-w-xs leading-relaxed">
+            {SITE.tagline}. Quality finds at fair prices, paid with M-Pesa, picked up close to you.
           </p>
         </div>
 
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-accent-600 mb-4">Shop</p>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li><Link to="/" className="hover:text-brand-700 transition">Home</Link></li>
-            <li><Link to="/about" className="hover:text-brand-700 transition">About</Link></li>
-            <li><Link to="/cart" className="hover:text-brand-700 transition">Cart</Link></li>
+          <p className="eyebrow !text-sun-400 mb-4">Duka</p>
+          <ul className="space-y-2 text-sm text-paper/80">
+            <li><Link to="/" className="hover:text-sun-300">Shop</Link></li>
+            <li><Link to="/about" className="hover:text-sun-300">Our Story</Link></li>
+            <li><Link to="/cart" className="hover:text-sun-300">Kikapu (Cart)</Link></li>
           </ul>
         </div>
 
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-accent-600 mb-4">Support</p>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li><Link to="/track" className="hover:text-brand-700 transition">Track Order</Link></li>
-            <li><a href="mailto:hello@mumithrifts.com" className="hover:text-brand-700 transition">hello@mumithrifts.com</a></li>
+          <p className="eyebrow !text-sun-400 mb-4">Msaada / Help</p>
+          <ul className="space-y-2 text-sm text-paper/80">
+            <li><Link to="/track" className="hover:text-sun-300">Track Order</Link></li>
+            <li><a href={`mailto:${SITE.email}`} className="hover:text-sun-300">{SITE.email}</a></li>
+            {wa && (
+              <li><a href={wa} target="_blank" rel="noreferrer" className="hover:text-sun-300">WhatsApp us</a></li>
+            )}
+            <li className="text-paper/60">Based in {SITE.town}, Kenya</li>
           </ul>
         </div>
       </div>
 
-      <div className="border-t border-brand-100/70">
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="max-w-6xl mx-auto px-4 py-5 text-xs text-gray-400 text-center"
-        >
-          © {year} Mumi Thrifts. All rights reserved.
-        </motion.p>
+      <div className="border-t border-paper/15">
+        <p className="max-w-6xl mx-auto px-4 py-5 text-xs text-paper/60 text-center pb-24 sm:pb-5">
+          © {year} {SITE.name} · Made with ♥ in {SITE.town} 🇰🇪
+        </p>
       </div>
     </footer>
   );

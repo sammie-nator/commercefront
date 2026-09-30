@@ -5,37 +5,54 @@ import ProductCard from "../components/ProductCard";
 import ProductRail from "../components/ProductRail";
 import Carousel from "../components/Carousel";
 import Loader from "../components/Loader";
+import { SITE, waLink } from "../config/site";
 import hero1 from "../assets/hero1.jpg";
 import hero2 from "../assets/hero2.jpg";
 import hero3 from "../assets/hero3.jpg";
 
 const HERO_SLIDES = [
   {
-    eyebrow: "New Season",
-    title: "Curated pieces, chosen with care",
-    subtitle:
-      "Discover a hand-picked edit of quality goods — thoughtfully sourced, beautifully simple.",
-    ctaLabel: "Shop the Collection",
+    eyebrow: `Karibu · ${SITE.town}`,
+    title: "Thrift finds with real character.",
+    subtitle: "Hand-picked clothes, shoes and accessories at prices that respect your pocket.",
+    ctaLabel: "Nunua sasa",
     ctaTo: "#shop",
     image: hero1,
   },
   {
-    eyebrow: "Trending Now",
-    title: "Elegance, delivered to your door",
-    subtitle: "Fast, reliable pickup and delivery across every location we serve.",
-    ctaLabel: "Explore Products",
+    eyebrow: "Lipa na M-Pesa",
+    title: "Pay on your phone. Pick up near you.",
+    subtitle: "No stress checkout: enter your number, approve the prompt, collect your order.",
+    ctaLabel: "See what's new",
     ctaTo: "#shop",
     image: hero2,
   },
   {
-    eyebrow: "Customer Favorites",
-    title: "Loved by our community",
-    subtitle: "Join thousands of happy customers who shop with us every week.",
-    ctaLabel: "Start Shopping",
+    eyebrow: "Mpya wiki hii",
+    title: "Fresh drops, every week.",
+    subtitle: "Good pieces go fast. Check back often before your size is gone.",
+    ctaLabel: "Start shopping",
     ctaTo: "#shop",
     image: hero3,
   },
 ];
+
+const PERKS = [
+  { icon: "📱", title: "Lipa na M-Pesa", text: "Secure STK push, no cards needed" },
+  { icon: "📍", title: `Pickup in ${SITE.town}`, text: "Choose a point that suits you" },
+  { icon: "🔎", title: "Track your order", text: "Phone number + 4-digit code" },
+];
+
+const Chip = ({ active, onClick, children }) => (
+  <button
+    onClick={onClick}
+    className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-display font-bold border-2 border-ink transition ${
+      active ? "bg-accent-500 text-paper shadow-pop-sm" : "bg-white text-ink hover:bg-sun-300"
+    }`}
+  >
+    {children}
+  </button>
+);
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -43,6 +60,7 @@ const Home = () => {
   const [activeCategory, setActiveCategory] = useState("");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const wa = waLink();
 
   useEffect(() => {
     api.get("/products/categories").then((res) => setCategories(res.data));
@@ -70,69 +88,73 @@ const Home = () => {
     <div>
       <div className="max-w-6xl mx-auto px-4 pt-6">
         <Carousel slides={HERO_SLIDES} />
+
+        <div className="grid sm:grid-cols-3 gap-3 mt-5">
+          {PERKS.map((p) => (
+            <div key={p.title} className="flex items-center gap-3 bg-white border-2 border-ink rounded-xl px-4 py-3">
+              <span className="text-2xl">{p.icon}</span>
+              <div className="leading-tight">
+                <p className="font-display font-bold text-sm">{p.title}</p>
+                <p className="text-xs text-ink/60">{p.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div id="shop" className="max-w-6xl mx-auto px-4 py-10">
-        <motion.h1
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="font-display italic text-3xl text-gray-900 mb-6"
-        >
-          Shop our latest products
-        </motion.h1>
-
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search products..."
-            className="flex-1 border border-brand-100 rounded-xl px-4 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-brand-400 transition"
-          />
+      <div id="shop" className="max-w-6xl mx-auto px-4 pt-14 scroll-mt-20">
+        <div className="mb-6">
+          <p className="eyebrow mb-1">Duka letu</p>
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="font-display font-extrabold text-4xl"
+          >
+            Shop the latest
+          </motion.h1>
         </div>
 
-        <div className="flex gap-2 mb-10 flex-wrap">
-          <button
-            onClick={() => setActiveCategory("")}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium border transition ${
-              activeCategory === ""
-                ? "bg-brand-gradient text-white border-transparent shadow-glow"
-                : "bg-white text-gray-600 border-brand-100 hover:border-brand-300"
-            }`}
-          >
-            All
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium border transition ${
-                activeCategory === cat
-                  ? "bg-brand-gradient text-white border-transparent shadow-glow"
-                  : "bg-white text-gray-600 border-brand-100 hover:border-brand-300"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Sticky search + category chips */}
+        <div className="sticky top-[74px] z-30 -mx-4 px-4 py-3 bg-paper/95 backdrop-blur border-y-2 border-ink/10 mb-8">
+          <div className="relative">
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/40">🔍</span>
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Tafuta... dress, sneakers, jacket"
+              className="field !mt-0 pl-10"
+            />
+          </div>
+          <div className="flex gap-2 mt-3 overflow-x-auto scrollbar-hide -mx-4 px-4">
+            <Chip active={activeCategory === ""} onClick={() => setActiveCategory("")}>Zote</Chip>
+            {categories.map((cat) => (
+              <Chip key={cat} active={activeCategory === cat} onClick={() => setActiveCategory(cat)}>
+                {cat}
+              </Chip>
+            ))}
+          </div>
         </div>
 
         {!loading && !search && !activeCategory && trending.length > 0 && (
-          <ProductRail products={trending} subtitle="Hand Picked" title="Trending Now" />
+          <ProductRail products={trending} subtitle="Zinauzwa haraka" title="Trending now" />
         )}
 
         {loading ? (
-          <Loader label="Fetching products..." />
+          <Loader label="Inaleta bidhaa..." />
         ) : products.length === 0 ? (
-          <p className="text-gray-500 text-center py-16">No products found.</p>
+          <div className="text-center py-16">
+            <p className="font-display font-bold text-xl mb-1">Hakuna kitu hapa 😅</p>
+            <p className="text-ink/60">No products found. Try another search.</p>
+            {wa && (
+              <a href={wa} target="_blank" rel="noreferrer" className="btn-mpesa mt-5">
+                Ask us on WhatsApp
+              </a>
+            )}
+          </div>
         ) : (
           <>
-            <div className="flex items-end justify-between mb-5">
-              <h2 className="font-display italic text-3xl text-gray-900">All Products</h2>
-            </div>
-            <motion.div
-              layout
-              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
-            >
+            <h2 className="font-display font-extrabold text-3xl mb-5">All products</h2>
+            <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
               {products.map((p, i) => (
                 <motion.div
                   key={p._id}

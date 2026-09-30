@@ -10,6 +10,7 @@ import About from "./pages/About";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/Orderconfirmation";
 import OrderTracking from "./pages/OrderTracking";
 
 import AdminLogin from "./admin/AdminLogin";
@@ -24,7 +25,7 @@ import RequireAdmin from "./admin/RequireAdmin";
 const StorefrontLayout = ({ children }) => (
   <div className="min-h-screen flex flex-col">
     <Navbar />
-    <div className="flex-1">{children}</div>
+    <main className="flex-1 pb-20 sm:pb-0">{children}</main>
     <Footer />
   </div>
 );
@@ -73,6 +74,15 @@ function App() {
             element={
               <StorefrontLayout>
                 <Checkout />
+              </StorefrontLayout>
+            }
+          />
+          {/* Payment result page — polls until confirmed or failed */}
+          <Route
+            path="/order/:checkoutId"
+            element={
+              <StorefrontLayout>
+                <OrderConfirmation />
               </StorefrontLayout>
             }
           />
