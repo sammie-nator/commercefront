@@ -72,6 +72,7 @@ const AdminProducts = () => {
     });
     setEditingId(p._id);
     setShowForm(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id) => {
@@ -87,71 +88,76 @@ const AdminProducts = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Products</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h1 className="font-display font-extrabold text-2xl sm:text-3xl">Products</h1>
+          <p className="text-sm text-ink/60">{products.length} in the duka</p>
+        </div>
         <button
           onClick={() => (showForm ? resetForm() : setShowForm(true))}
-          className="bg-brand-600 text-white font-medium px-4 py-2 rounded-lg text-sm hover:bg-brand-700"
+          className={`${showForm ? "btn-ghost" : "btn-primary"} btn-sm`}
         >
           {showForm ? "Cancel" : "+ New Product"}
         </button>
       </div>
 
       {showForm && (
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white border border-gray-100 rounded-xl p-5 mb-6 grid sm:grid-cols-2 gap-4"
-        >
+        <form onSubmit={handleSubmit} className="card p-4 sm:p-5 mb-6 grid sm:grid-cols-2 gap-3 sm:gap-4">
+          <h2 className="sm:col-span-2 font-display font-bold text-lg">
+            {editingId ? "Edit product" : "New product"}
+          </h2>
           <input
             required
             placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            className="border border-gray-200 rounded-lg px-3 py-2"
+            className="field !mt-0"
           />
           <input
             required
             placeholder="Category"
             value={form.category}
             onChange={(e) => setForm({ ...form, category: e.target.value })}
-            className="border border-gray-200 rounded-lg px-3 py-2"
+            className="field !mt-0"
           />
           <input
             required
             type="number"
             min="0"
+            inputMode="numeric"
             placeholder="Price (KES)"
             value={form.price}
             onChange={(e) => setForm({ ...form, price: e.target.value })}
-            className="border border-gray-200 rounded-lg px-3 py-2"
+            className="field !mt-0"
           />
           <input
             required
             type="number"
             min="0"
+            inputMode="numeric"
             placeholder="Stock quantity"
             value={form.stock}
             onChange={(e) => setForm({ ...form, stock: e.target.value })}
-            className="border border-gray-200 rounded-lg px-3 py-2"
+            className="field !mt-0"
           />
           <textarea
             placeholder="Description"
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="border border-gray-200 rounded-lg px-3 py-2 sm:col-span-2"
+            className="field !mt-0 sm:col-span-2"
             rows={3}
           />
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={(e) => setFiles(Array.from(e.target.files))}
-            className="sm:col-span-2 text-sm"
-          />
-          <button
-            type="submit"
-            className="sm:col-span-2 bg-brand-600 text-white font-semibold py-2.5 rounded-lg hover:bg-brand-700"
-          >
+          <div className="sm:col-span-2">
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => setFiles(Array.from(e.target.files))}
+              className="block w-full text-sm file:mr-3 file:rounded-lg file:border-2 file:border-ink file:bg-sun-400 file:px-3 file:py-1.5 file:font-display file:font-bold"
+            />
+            {files.length > 0 && <p className="text-xs text-ink/60 mt-1">{files.length} image(s) selected</p>}
+          </div>
+          <button type="submit" className="sm:col-span-2 btn-primary">
             {editingId ? "Update Product" : "Create Product"}
           </button>
         </form>
@@ -159,33 +165,31 @@ const AdminProducts = () => {
 
       {loading ? (
         <Loader />
+      ) : products.length === 0 ? (
+        <p className="text-center text-ink/50 py-16">No products yet. Add your first one.</p>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
           {products.map((p) => (
-            <div key={p._id} className="bg-white border border-gray-100 rounded-xl overflow-hidden">
+            <div key={p._id} className="card overflow-hidden flex flex-col min-w-0">
               <img
                 src={imageUrl(p.images?.[0])}
                 alt={p.name}
-                className="h-36 w-full object-cover"
+                className="aspect-[4/3] w-full object-cover border-b-2 border-ink"
               />
-              <div className="p-3">
-                <p className="font-semibold">{p.name}</p>
-                <p className="text-xs text-gray-500">{p.category}</p>
-                <div className="flex justify-between items-center mt-2 text-sm">
-                  <span className="font-bold">KES {p.price.toLocaleString()}</span>
-                  <span className="text-gray-500">{p.stock} in stock</span>
+              <div className="p-3 flex flex-col flex-1">
+                <p className="font-display font-bold leading-snug line-clamp-2">{p.name}</p>
+                <p className="text-xs text-ink/50">{p.category}</p>
+                <div className="flex flex-wrap justify-between items-center gap-x-2 mt-2 text-sm">
+                  <span className="font-display font-extrabold">KES {p.price.toLocaleString()}</span>
+                  <span className={p.stock <= 3 ? "text-accent-600 font-semibold" : "text-ink/60"}>
+                    {p.stock} left
+                  </span>
                 </div>
-                <div className="flex gap-2 mt-3">
-                  <button
-                    onClick={() => handleEdit(p)}
-                    className="flex-1 text-xs border border-gray-200 rounded-lg py-1.5 hover:bg-gray-50"
-                  >
+                <div className="flex gap-2 mt-auto pt-3">
+                  <button onClick={() => handleEdit(p)} className="btn-ghost btn-sm flex-1">
                     Edit
                   </button>
-                  <button
-                    onClick={() => handleDelete(p._id)}
-                    className="flex-1 text-xs border border-red-200 text-red-500 rounded-lg py-1.5 hover:bg-red-50"
-                  >
+                  <button onClick={() => handleDelete(p._id)} className="btn-danger btn-sm flex-1">
                     Delete
                   </button>
                 </div>
