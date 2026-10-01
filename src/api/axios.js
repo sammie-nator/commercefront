@@ -5,7 +5,7 @@ const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000/api",
 });
 
-// Token still attached if present (backend ignores it while auth is off)
+// Attach the admin session token (if any) to every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("adminToken");
   if (token) {
@@ -13,5 +13,22 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// If the server says the session is gone/expired, clear it and go to login.
+// (Wrong-PIN 401s from the login/setup calls are left alone.)
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    const url = err.config?.url || "";
+    const isAuthCall = url.includes("/admin/login") || url.includes("/admin/setup");
+    if (err.response?.status === 401 && localStorage.getItem("adminToken") && !isAuthCall) {
+      ["adminToken", "adminName", "adminRole", "adminExpires"].forEach((k) => localStorage.removeItem(k));
+      if (!window.location.pathname.startsWith("/admin/login")) {
+        window.location.href = "/admin/login";
+      }
+    }
+    return Promise.reject(err);
+  }
+);
 
 export default api;
