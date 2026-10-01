@@ -95,7 +95,7 @@ function App() {
             }
           />
 
-          {/* Admin — open, no real login */}
+          {/* Admin — name + PIN login; owner-only pages are role-gated */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/admin"
@@ -105,11 +105,11 @@ function App() {
               </RequireAdmin>
             }
           >
-            <Route index element={<AdminAnalytics />} />
+            <Route index element={<RequireAdmin roles={["owner"]}><AdminAnalytics /></RequireAdmin>} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="products" element={<AdminProducts />} />
-            <Route path="locations" element={<AdminLocations />} />
-            <Route path="staff" element={<AdminUsers />} />
+            <Route path="locations" element={<RequireAdmin roles={["owner"]}><AdminLocations /></RequireAdmin>} />
+            <Route path="staff" element={<RequireAdmin roles={["owner"]}><AdminUsers /></RequireAdmin>} />
           </Route>
         </Routes>
       </CartProvider>
