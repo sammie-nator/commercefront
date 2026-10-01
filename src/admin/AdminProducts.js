@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import api from "../api/axios";
 import { imageUrl } from "../utils/imageUrl";
 import Loader from "../components/Loader";
+import { isOwner } from "./AdminAuth";
 
 const emptyForm = {
   name: "",
@@ -189,9 +190,11 @@ const AdminProducts = () => {
                   <button onClick={() => handleEdit(p)} className="btn-ghost btn-sm flex-1">
                     Edit
                   </button>
-                  <button onClick={() => handleDelete(p._id)} className="btn-danger btn-sm flex-1">
-                    Delete
-                  </button>
+                  {isOwner() && (
+                    <button onClick={() => handleDelete(p._id)} className="btn-danger btn-sm flex-1">
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
