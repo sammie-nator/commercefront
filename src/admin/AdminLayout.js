@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, Link, useLocation } from "react-router-dom";
-import { adminLogout } from "./AdminAuth";
+import { adminLogout, getAdminRole, getAdminName } from "./AdminAuth";
 
 const NAV = [
-  { to: "/admin", label: "Analytics", icon: "📊", end: true },
+  { to: "/admin", label: "Analytics", icon: "📊", end: true, owner: true },
   { to: "/admin/orders", label: "Orders", icon: "📦" },
   { to: "/admin/products", label: "Products", icon: "🛍️" },
-  { to: "/admin/locations", label: "Pickup Locations", icon: "📍" },
-  { to: "/admin/staff", label: "Staff & PINs", icon: "🔐" },
+  { to: "/admin/locations", label: "Pickup Locations", icon: "📍", owner: true },
+  { to: "/admin/staff", label: "Staff & PINs", icon: "🔐", owner: true },
 ];
 
 const linkClass = ({ isActive }) =>
@@ -19,6 +19,8 @@ const linkClass = ({ isActive }) =>
 
 const AdminLayout = () => {
   const location = useLocation();
+  const role = getAdminRole();
+  const visibleNav = NAV.filter((n) => !n.owner || role === "owner");
   const [open, setOpen] = useState(false); // mobile drawer
   const [collapsed, setCollapsed] = useState(() => {
     try {
@@ -93,7 +95,7 @@ const AdminLayout = () => {
         <div className="shuka-band shuka-band-sm" />
 
         <nav className="space-y-1.5 flex-1 overflow-y-auto p-3">
-          {NAV.map((n) => (
+          {visibleNav.map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end} className={linkClass}>
               <span className="text-base">{n.icon}</span>
               {n.label}
@@ -109,7 +111,7 @@ const AdminLayout = () => {
 
         <div className="p-4 border-t border-paper/15 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <p className="text-xs text-paper/60 mb-2 truncate">
-            Signed in as {localStorage.getItem("adminName") || "admin"}
+            Signed in as {getAdminName()} ({role})
           </p>
           <button onClick={() => adminLogout()} className="text-sm font-display font-bold text-sun-300 hover:underline">
             Log out
@@ -131,7 +133,7 @@ const AdminLayout = () => {
             <span className="block h-0.5 w-5 bg-ink" />
           </button>
           <span className="font-display font-extrabold text-lg">
-            {NAV.find((n) => (n.end ? location.pathname === n.to : location.pathname.startsWith(n.to)))?.label || "Admin"}
+            {visibleNav.find((n) => (n.end ? location.pathname === n.to : location.pathname.startsWith(n.to)))?.label || "Admin"}
           </span>
         </header>
 
